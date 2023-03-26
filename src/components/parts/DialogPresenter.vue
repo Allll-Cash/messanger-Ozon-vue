@@ -1,20 +1,10 @@
 <template>
-  <div class="card text-left">
-
-    <div class="card-header">
-      <h6 class="card-title">{{dialog.name}}</h6>
-    </div>
-
-    <div class="card-body">
-      <div class="card-text">
-        <span class="text-muted"><i>{{dialog.last_message}}</i></span>
-      </div>
-    </div>
-
-    <div class="card-footer">
-      <slot></slot>
-    </div>
-
+  <div class="dialog text-left">
+    <button class="btn dialog-btn" @click="open_dialog()">
+      <h6>{{dialog.name}}</h6>
+      <span>{{text}}</span> <br>
+      <small class="text-muted">{{dialog.last_message.time}}</small>
+    </button>
   </div>
 </template>
 
@@ -27,55 +17,43 @@ export default {
       required: true
     }
   },
+  computed: {
+    text() {
+      return this.dialog.last_message.text.length < 30 ?
+        this.dialog.last_message.text :
+        (this.dialog.last_message.text.slice(0, 27) + '...')
+    }
+  },
   data() {
     return {
     }
   },
-  methods: {}
+  methods: {
+    open_dialog: function () {
+      Event.fire('open-dialog', this.dialog)
+    }
+  }
 }
 </script>
 
 <style scoped>
-.card {
-  margin-bottom: 10px;
-  background-repeat: no-repeat;
-  background-position: right 5px bottom 5px;
-  background-size: 55px;
+.dialog {
+  width: 400px;
+  height: 80px;
+}
+
+.dialog-btn {
+  border-radius: 0;
+  background-color: white;
+  border-color: white;
+  width: 100%;
   height: 100%;
-}
-
-.card a {
-  font-size: 0.75rem;
-}
-
-.card-body {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  align-items: start;
-  padding: 10px;
-}
-
-.card-text {
-  font-size: 13px;
   text-align: left;
-}
-.row {
-  column-gap: 0;
+  border-bottom: #f0f3f6 1px solid;
 }
 
-.card-header {
-  text-align: left;
-  background-color: white;
-  border-bottom: none;
-  height: 30px;
-  padding: 10px 0 0 10px;
-}
-
-.card-footer {
-  text-align: left;
-  background-color: white;
-  border-top: none;
-  padding: 0 0 5px 10px;
+.dialog-btn:hover, .dialog-btn:active {
+  background-color: #f0f3f6 !important;
+  border-color: #f0f3f6 !important;
 }
 </style>

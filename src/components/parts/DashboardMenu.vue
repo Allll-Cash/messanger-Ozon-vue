@@ -1,30 +1,56 @@
 <template>
   <div class="menu-area">
-    <button class="btn btn-block" @click="change_state('dialogs')"
-            :style="btn_color('dialogs')">Все диалоги</button>
-    <button class="btn btn-block" @click="change_state('profile')"
-            :style="btn_color('profile')">Профиль</button>
-
-    <img :src="images.logo" alt="">
+    <div v-if="!dialogs.length">
+      <span class="text-muted">Нет диалогов</span>
+    </div>
+    <div class="messages-area" v-else>
+      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog"/>
+    </div>
+    <img :src="images.logo" height="200" style="text-align: center" alt="">
   </div>
 </template>
 
 <script>
+import DialogPresenter from './DialogPresenter.vue'
+
 export default {
   name: "DashboardMenu",
+  components: {DialogPresenter},
   data() {
     return {
-      state: 'dialogs'
+      dialogs: []
     }
   },
   methods: {
-    btn_color: function (btn) {
-      return 'background-color: ' + (btn === this.state ? '#f0f0f0' : 'white')
-    },
-    change_state: function (state) {
-      this.state = state
-      Event.fire('change-dashboard-state', state)
+    load: function () {
+      // тут загружать список диалогов
+      /*
+            axios
+              .get(this.url('/booking/by-date'), {params: {}})
+              .then((response) => {
+                this.data = response.data.bookings
+              })
+
+       */
+      this.dialogs = [{
+        id: 0,
+        name: 'Nadia',
+        last_message: {
+          text: 'Hello',
+          time: '18:00'
+        }
+      }, {
+        id: 1,
+        name: 'Dmitry',
+        last_message: {
+          text: 'Длинное сообщение чтобы проверить как оно сокращается и сокращается ли',
+          time: '19:00'
+        }
+      }]
     }
+  },
+  mounted() {
+    this.load()
   }
 }
 </script>
@@ -35,27 +61,24 @@ export default {
   top: 30px;
   bottom: 0;
   left: 0;
-  width: 200px;
+  width: 400px;
   background-color: white;
 }
 
-.btn-block {
-  width: 100%;
-  border-radius: 0;
-  margin: 0;
-  height: 40px;
+.messages-area {
+  position: absolute;
+  top: 0;
+  width: 400px;
+  left: 0;
+  bottom: 200px;
+  overflow-y: auto;
 }
 
-.btn-block:hover, .btn-block:active, .btn-block:focus {
-  border: transparent;
-  background-color: #f0f0f0;
-  height: 40px;
-}
 
 img {
   position: fixed;
-  bottom: 20px;
-  left: 10px;
+  bottom: 0;
+  left: 215px;
   width: 180px;
 }
 </style>

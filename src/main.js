@@ -5,8 +5,10 @@ import App from './App'
 
 import axios from 'axios'
 
+import VueConfirmDialog from 'vue-confirm-dialog'
+import JsonExcel from "vue-json-excel";
+
 import VModal from 'vue-js-modal/dist/index.nocss.js'
-import 'vue-js-modal/dist/styles.css'
 
 window.Event = new class {
   constructor() {
@@ -72,6 +74,10 @@ Vue.mixin({
     }
   }
 })
+
+
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 Vue.use(VModal, {componentName: 'Foo'})
 

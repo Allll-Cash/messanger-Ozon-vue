@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      state: 'login',
+      state: 'dashboard',
       user: {
         name: 'Lisa'
       }
@@ -122,7 +122,7 @@ export default {
   color: #ba1a1a;
 }
 
-.vc-btn, .btn-link {
+.btn-link {
   color: white;
 }
 
