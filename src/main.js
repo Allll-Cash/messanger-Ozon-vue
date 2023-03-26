@@ -5,15 +5,6 @@ import App from './App'
 
 import axios from 'axios'
 
-import VuePhoneNumberInput from 'vue-phone-number-input'
-import 'vue-phone-number-input/dist/vue-phone-number-input.css'
-import VueConfirmDialog from 'vue-confirm-dialog'
-import JsonExcel from "vue-json-excel";
-
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
-import 'vue2-datepicker/locale/ru';
-import da from "vue2-datepicker/locale/es/da";
 import VModal from 'vue-js-modal/dist/index.nocss.js'
 import 'vue-js-modal/dist/styles.css'
 
@@ -81,15 +72,6 @@ Vue.mixin({
     }
   }
 })
-
-Vue.component('vue-phone-number-input', VuePhoneNumberInput)
-Vue.use(VuePhoneNumberInput)
-
-Vue.use(VueConfirmDialog)
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
-
-Vue.component('DatePicker', DatePicker)
-Vue.component("downloadExcel", JsonExcel);
 
 Vue.use(VModal, {componentName: 'Foo'})
 
