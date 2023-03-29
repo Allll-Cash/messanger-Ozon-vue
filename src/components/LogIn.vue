@@ -19,6 +19,7 @@ import axios from "axios";
 
 export default {
   name: "LogIn",
+  props: ['user'],
   components: {},
   data() {
     return {
@@ -30,26 +31,24 @@ export default {
   methods: {
     get_code: function () {
       if (this.email_re.exec(this.email)) {
-        /* Написать под сервер вход
         axios
-          .post(this.url('/auth/login'), {
-            phone: '+7 ' + this.number,
-            chatId: '',
-            name: '',
-            expectedRole: 'ADMIN'
+          .post(this.url('/v1/user'), {
+            user_id: this.email
           })
           .then((response) => {
+            console.log(response)
             if (response.data.status === 'FAIL') {
               this.error = 'Ошибка доступа'
             } else {
               this.error = ''
-              this.userId = response.data.userId ? response.data.userId : 31
-              this.state = 'code'
+              this.user = response.data.user
+              if (!this.user) {
+                this.error = 'Ошибка аторизации'
+              } else {
+                Event.fire('authorised', this.user)
+              }
             }
           })
-        //вместо {name: 'Lisa'} передать логин с сервера
-         */
-        Event.fire('authorised', {name: 'Lisa'})
       } else {
         this.error = 'Пожалуйста, проверьте корректность ввода'
       }

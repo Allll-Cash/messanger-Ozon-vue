@@ -6,7 +6,6 @@ import App from './App'
 import axios from 'axios'
 
 import VueConfirmDialog from 'vue-confirm-dialog'
-import JsonExcel from "vue-json-excel";
 
 import VModal from 'vue-js-modal/dist/index.nocss.js'
 
@@ -35,7 +34,7 @@ window.Event = new class {
 Vue.mixin({
   methods: {
     url: function (route) {
-      return 'http://kuchum.nostress.dev:8081/' + route
+      return 'https://mywill.nostress.dev' + route
     },
     start_of_day: function (date) {
       date.setHours(0, 0, 0, 0)

@@ -10,7 +10,6 @@
 <script>
 export default {
   name: "DashboardHeader",
-  props: ['admin'],
   methods: {
     exit: function () {
       this.$confirm({

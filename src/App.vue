@@ -4,7 +4,7 @@
 <log-in v-if="state === 'login'"/>
     <div v-if="state === 'dashboard'">
       <dashboard-header/>
-      <dashboard-menu/>
+      <dashboard-menu :user="user"/>
       <dashboard :user="user"/>
     </div>
   </div>
@@ -18,6 +18,7 @@ import DashboardMenu from "./components/parts/DashboardMenu.vue";
 
 export default {
   name: 'App',
+  props: ['user'],
   components: {
     Dashboard,
     LogIn,
@@ -26,16 +27,17 @@ export default {
   },
   data() {
     return {
-      state: 'dashboard',
-      user: {
-        name: 'Lisa'
-      }
+      state: 'login',
+      // user: {
+      //   name: 'Lisa'
+      // }
     }
   },
   methods: {},
   created() {
     Event.listen('authorised', (user) => {
       this.user = user
+      console.log(user)
       this.state = 'dashboard'
     })
     Event.listen('exit', () => {

@@ -4,7 +4,7 @@
       <span class="text-muted">Нет диалогов</span>
     </div>
     <div class="messages-area" v-else>
-      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog"/>
+      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog" :user="user"/>
     </div>
     <img :src="images.logo" height="200" style="text-align: center" alt="">
   </div>
@@ -12,41 +12,66 @@
 
 <script>
 import DialogPresenter from './DialogPresenter.vue'
+import axios from "axios";
 
 export default {
   name: "DashboardMenu",
+  props: ['dialogs', 'user'],
   components: {DialogPresenter},
-  data() {
-    return {
-      dialogs: []
-    }
-  },
   methods: {
+    update() {
+      axios
+        .post(this.url('/v1/dialogs'),
+          {
+            user_id: this.user.id,
+            limit: 100
+          }
+        )
+        .then((response) => {
+          console.log(response)
+          // this.data = response.data.bookings
+          this.dialogs = response.data.dialogs
+          // this.loading = false
+          // setTimeout(() => this.update(), 1000)
+        })
+    },
     load: function () {
-      // тут загружать список диалогов
-      /*
-            axios
-              .get(this.url('/booking/by-date'), {params: {}})
-              .then((response) => {
-                this.data = response.data.bookings
-              })
-
-       */
-      this.dialogs = [{
-        id: 0,
-        name: 'Nadia',
-        last_message: {
-          text: 'Hello',
-          time: '18:00'
-        }
-      }, {
-        id: 1,
-        name: 'Dmitry',
-        last_message: {
-          text: 'Длинное сообщение чтобы проверить как оно сокращается и сокращается ли',
-          time: '19:00'
-        }
-      }]
+      axios
+        .post(this.url('/v1/dialogs'),
+          {
+            user_id: this.user.id,
+            limit: 100
+          }
+        )
+        .then((response) => {
+          // this.dialogs = [{
+          //   id: 0,
+          //   meta: {name: 'Nadia'},
+          //   last_message: {
+          //     content : {
+          //       text_content : {
+          //         text: 'Hello',
+          //       }
+          //     },
+          //     timestamp: '18:00'
+          //   }
+          // }, {
+          //   id: 1,
+          //   meta: {name: 'Dmitry'},
+          //   last_message: {
+          //     content : {
+          //       text_content : {
+          //         text: 'Длинное сообщение чтобы проверить как оно сокращается и сокращается ли',
+          //       }
+          //     },
+          //     timestamp: '19:00'
+          //   }
+          // }]
+          console.log(response)
+          // this.data = response.data.bookings
+          this.dialogs = response.data.dialogs
+          this.loading = false
+        })
     }
   },
   mounted() {
