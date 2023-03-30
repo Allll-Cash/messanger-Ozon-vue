@@ -3,8 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 
-import axios from 'axios'
-
 import VueConfirmDialog from 'vue-confirm-dialog'
 
 import VModal from 'vue-js-modal/dist/index.nocss.js'
@@ -36,25 +34,9 @@ Vue.mixin({
     url: function (route) {
       return 'https://mywill.nostress.dev' + route
     },
-    start_of_day: function (date) {
-      date.setHours(0, 0, 0, 0)
-      return date
-    },
-    format_time: function (hours, minutes) {
-      return `${this.zero_pad(hours)}:${this.zero_pad(minutes)}`
-    },
-    format_date: function (day, month) {
-      return `${this.zero_pad(day)}.${this.zero_pad(month)}`
-    },
-    zero_pad: function (number) {
-      return `${number > 9 ? number : ('0' + number)}`
-    },
     is_empty: function (str) {
       return !str || str === ''
     },
-    toISOString: function (date) {
-      return `${date.getFullYear()}-${this.zero_pad(date.getMonth() + 1)}-${date.getDate()}T${this.zero_pad(date.getHours())}:00:00.000Z`
-    }
   },
   computed: {
     email_re() {

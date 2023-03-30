@@ -36,19 +36,18 @@ export default {
             user_id: this.email
           })
           .then((response) => {
-            console.log(response)
-            if (response.data.status === 'FAIL') {
-              this.error = 'Ошибка доступа'
-            } else {
+              // console.log(response)
               this.error = ''
-              this.user = response.data.user
-              if (!this.user) {
+              let user = response.data.user
+              if (!user) {
                 this.error = 'Ошибка аторизации'
+              } else if (this.is_empty(user.meta.name)) {
+                Event.fire('settings', user)
               } else {
-                Event.fire('authorised', this.user)
+                Event.fire('authorised', user)
               }
             }
-          })
+          )
       } else {
         this.error = 'Пожалуйста, проверьте корректность ввода'
       }

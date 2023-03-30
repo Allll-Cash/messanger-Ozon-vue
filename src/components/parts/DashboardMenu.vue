@@ -4,7 +4,7 @@
       <span class="text-muted">Нет диалогов</span>
     </div>
     <div class="messages-area" v-else>
-      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog" :user="user"/>
+      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog" :user="user" :users="users"/>
     </div>
     <img :src="images.logo" height="200" style="text-align: center" alt="">
   </div>
@@ -16,7 +16,7 @@ import axios from "axios";
 
 export default {
   name: "DashboardMenu",
-  props: ['dialogs', 'user'],
+  props: ['dialogs', 'user', 'users'],
   components: {DialogPresenter},
   methods: {
     update() {
@@ -28,50 +28,53 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response)
+          // console.log(response)
           // this.data = response.data.bookings
           this.dialogs = response.data.dialogs
+          this.users = response.data.users
+          console.log(this.users)
           // this.loading = false
-          // setTimeout(() => this.update(), 1000)
         })
+      // setTimeout(() => this.update(), 1000)
     },
     load: function () {
-      axios
-        .post(this.url('/v1/dialogs'),
-          {
-            user_id: this.user.id,
-            limit: 100
-          }
-        )
-        .then((response) => {
-          // this.dialogs = [{
-          //   id: 0,
-          //   meta: {name: 'Nadia'},
-          //   last_message: {
-          //     content : {
-          //       text_content : {
-          //         text: 'Hello',
-          //       }
-          //     },
-          //     timestamp: '18:00'
-          //   }
-          // }, {
-          //   id: 1,
-          //   meta: {name: 'Dmitry'},
-          //   last_message: {
-          //     content : {
-          //       text_content : {
-          //         text: 'Длинное сообщение чтобы проверить как оно сокращается и сокращается ли',
-          //       }
-          //     },
-          //     timestamp: '19:00'
-          //   }
-          // }]
-          console.log(response)
-          // this.data = response.data.bookings
-          this.dialogs = response.data.dialogs
-          this.loading = false
-        })
+      this.update()
+      // axios
+      //   .post(this.url('/v1/dialogs'),
+      //     {
+      //       user_id: this.user.id,
+      //       limit: 100
+      //     }
+      //   )
+      //   .then((response) => {
+      //     // this.dialogs = [{
+      //     //   id: 0,
+      //     //   meta: {name: 'Nadia'},
+      //     //   last_message: {
+      //     //     content : {
+      //     //       text_content : {
+      //     //         text: 'Hello',
+      //     //       }
+      //     //     },
+      //     //     timestamp: '18:00'
+      //     //   }
+      //     // }, {
+      //     //   id: 1,
+      //     //   meta: {name: 'Dmitry'},
+      //     //   last_message: {
+      //     //     content : {
+      //     //       text_content : {
+      //     //         text: 'Длинное сообщение чтобы проверить как оно сокращается и сокращается ли',
+      //     //       }
+      //     //     },
+      //     //     timestamp: '19:00'
+      //     //   }
+      //     // }]
+      //     // console.log(response)
+      //     // this.data = response.data.bookings
+      //     this.dialogs = response.data.dialogs
+      //     this.loading = false
+      //   })
     }
   },
   mounted() {

@@ -14,7 +14,7 @@ import axios from "axios";
 
 export default {
   name: "DialogPresenter",
-  props: ['dialog', 'user', 'text', 'time'],
+  props: ['dialog', 'user', 'text', 'time', 'users', 'sender'],
   computed: {
   },
   data() {
@@ -23,12 +23,13 @@ export default {
   },
   methods: {
     open_dialog: function () {
-      console.log(this.dialog)
-      console.log(this.user)
+      // console.log(this.dialog)
+      // console.log(this.user)
       let dialogAndUser = {"dialog" : this.dialog, "user" : this.user}
-      console.log(dialogAndUser)
+      // console.log(dialogAndUser)
       this.textFunc()
       this.timeFunc()
+      // this.senderFunc()
       Event.fire('open-dialog', dialogAndUser)
     },
     update() {
@@ -42,19 +43,23 @@ export default {
           this.dialog = response.data.dialog
           this.textFunc()
           this.timeFunc()
+          // this.senderFunc()
         })
       setTimeout(() => this.update(), 1000)
     },
     textFunc() {
-      let text = '';
+      this.senderFunc()
+      let text = this.sender;
       // console.log(this.dialog)
-      // console.log(this.user)
+      console.log(this.user)
+      console.log('1111', text)
       if (this.dialog.lastMessage.content.textContent) {
-        text = this.dialog.lastMessage.content.textContent.text
+        text = text + this.dialog.lastMessage.content.textContent.text
       }
       if (this.dialog.lastMessage.content.serviceContent) {
-        text = this.dialog.lastMessage.content.serviceContent.text
+        text = text + this.dialog.lastMessage.content.serviceContent.text
       }
+      console.log('2222', text)
       this.text = text.length < 30 ?
         text :
         (text.slice(0, 27) + '...')
@@ -67,7 +72,24 @@ export default {
       const month = date.getUTCMonth() + 1;
       const realMonth = month < 10 ? '0' + month : month
       this.time = hours + ':' + minutes + ', ' + day + '/' + realMonth;
-    }
+    },
+    senderFunc() {
+      // console.log('xxxxx', this.users)
+      // console.log('sender', this.dialog.lastMessage.senderId)
+      if (this.is_empty(this.dialog.lastMessage.senderId)) {
+        this.sender = ''
+        return
+      }
+      // console.log('sender not empty')
+      // console.log('msg', msg.senderId)
+      for (const user of this.users) {
+        // console.log('user', user.id)
+        if (user.id === this.dialog.lastMessage.senderId) {
+          // console.log(user)
+          this.sender = user.meta.name + ': '
+        }
+      }
+    },
   },
   mounted() {
     this.update()

@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <vue-confirm-dialog/>
-<log-in v-if="state === 'login'"/>
+    <log-in v-if="state === 'login'"/>
+    <settings v-if="state === 'settings'" :user="user"/>
     <div v-if="state === 'dashboard'">
       <dashboard-header/>
       <dashboard-menu :user="user"/>
@@ -15,6 +16,7 @@ import DashboardHeader from "./components/parts/DashboardHeader.vue";
 import LogIn from "./components/LogIn.vue";
 import Dashboard from "./components/Dashboard.vue";
 import DashboardMenu from "./components/parts/DashboardMenu.vue";
+import Settings from "./components/Settings.vue";
 
 export default {
   name: 'App',
@@ -23,7 +25,8 @@ export default {
     Dashboard,
     LogIn,
     DashboardHeader,
-    DashboardMenu
+    DashboardMenu,
+    Settings
   },
   data() {
     return {
@@ -37,12 +40,16 @@ export default {
   created() {
     Event.listen('authorised', (user) => {
       this.user = user
-      console.log(user)
+      // console.log(user)
       this.state = 'dashboard'
     })
     Event.listen('exit', () => {
       this.state = 'login'
       this.user = undefined
+    })
+    Event.listen('settings', (user) => {
+      this.user = user
+      this.state = 'settings'
     })
   }
 }
@@ -95,7 +102,7 @@ export default {
 .btn-secondary:hover, .btn-secondary:active {
   background-color: #66cfe7 !important;
   border-color: #66cfe7 !important;
-  color: white!important;
+  color: white !important;
 }
 
 .btn-danger {
@@ -145,7 +152,7 @@ span {
   font-size: 14px;
 }
 
-small{
+small {
   font-size: 11px;
 }
 
