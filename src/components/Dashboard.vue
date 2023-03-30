@@ -1,10 +1,15 @@
 <template>
   <div class="dashboard-area" :style="`height: ${window_height - 30}px`">
-    <div class="center-content" v-if="!current_dialog">
+    <div v-if="state === 'create-dialog'">
+      <div class="create-dialog-area">
+        <dialogs-creator-full :user="user"/>
+      </div>
+    </div>
+    <div v-else-if="!current_dialog">
       <span>Выберите диалог</span>
     </div>
 
-    <div v-if="current_dialog">
+    <div v-if="current_dialog && state==='dashboard'">
       <div class="messages-area">
         <div v-for="msg in messages" style="text-align: left">
           <span :style="`color: ${msg.senderId === user.id ? '#e5365a' : '#265bf5'};}`">{{ sender(msg) }}</span>
@@ -34,10 +39,12 @@
 
 <script>
 import axios from 'axios'
+import DialogsCreatorFull from "./parts/DialogCreatorFull.vue";
 
 
 export default {
   name: "Dashboard",
+  components: {DialogsCreatorFull},
   props: ['user'],
   data() {
     return {
@@ -45,6 +52,7 @@ export default {
       messages: [],
       message: '',
       users: [],
+      state: 'dashboard'
     }
   },
   computed: {},
@@ -66,21 +74,6 @@ export default {
           this.users = response.data.users.reverse()
           // console.log(this.users)
           console.log("update")
-          // for (const msg in this.messages) {
-          //   console.log("im here")
-          //   let b = false
-          //   for (const user in this.users) {
-          //     if (user.id === msg.lastMessage.senderId) {
-          //       b = true
-          //       break
-          //     }
-          //   }
-          //   console.log(b)
-          //   if (b === false) {
-          //     console.log(msg.lastMessage.senderId)
-          //   }
-          // }
-          // for ()
         })
       setTimeout(() => {this.update()}, 1000)
     },
@@ -144,7 +137,11 @@ export default {
       // console.log(dialogAndUser.user)
       this.current_dialog = dialogAndUser.dialog
       this.user = dialogAndUser.user
+      this.state = 'dashboard'
       this.load()
+    })
+    Event.listen('create-dialog', () => {
+      this.state = 'create-dialog'
     })
   }
 }
@@ -166,6 +163,15 @@ export default {
   right: 0;
   left: 0;
   bottom: 150px;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.create-dialog-area {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
   padding: 10px;
   overflow-y: scroll;
 }

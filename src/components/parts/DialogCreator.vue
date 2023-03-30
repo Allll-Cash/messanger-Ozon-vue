@@ -1,12 +1,10 @@
 <template>
-  <div class="dialog text-left">
-    <button class="btn dialog-btn" @click="open_dialog()">
+  <div class="dialog">
+    <button class="btn dialog-btn" @click="create_dialog()">
 <!--      <h6>{{dialog.meta.name}}</h6>-->
 <!--      <span>{{text}}</span> <br>-->
 <!--      <small class="text-muted">{{time}}</small>-->
-      <h6>{{name}}</h6>
-      <span>{{text}}</span> <br>
-      <small class="text-muted">{{time}}</small>
+      Создать диалог
     </button>
   </div>
 </template>
@@ -16,8 +14,8 @@
 import axios from "axios";
 
 export default {
-  name: "DialogPresenter",
-  props: ['dialog', 'user', 'name', 'text', 'time'],
+  name: "DialogCreator",
+  props: [],
   computed: {
   },
   data() {
@@ -25,11 +23,13 @@ export default {
     }
   },
   methods: {
-    open_dialog: function () {
-      let dialogAndUser = {"dialog" : this.dialog, "user" : this.user}
-      Event.fire('open-dialog', dialogAndUser)
-    },
+    create_dialog() {
+      Event.fire('create-dialog')
+    }
   },
+  mounted() {
+    // this.update()
+  }
 }
 </script>
 
@@ -45,8 +45,10 @@ export default {
   border-color: white;
   width: 100%;
   height: 100%;
-  text-align: left;
+  text-align: center;
   border-bottom: #f0f3f6 1px solid;
+  color: #265bf5;
+  font-size: x-large;
 }
 
 .dialog-btn:hover, .dialog-btn:active {

@@ -1,10 +1,14 @@
 <template>
   <div class="menu-area">
-    <div v-if="!dialogs.length">
-      <span class="text-muted">Нет диалогов</span>
+    <div class="messages-area" v-if="!this.loading">
+      <dialog-creator/>
+      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog" :user="user" :name="dialog.meta.name"
+                        :text="textFunc(dialog)" :time="timeFunc(dialog)"/>
     </div>
     <div class="messages-area" v-else>
-      <dialog-presenter v-for="dialog in dialogs" :key="dialog.id" :dialog="dialog" :user="user" :users="users"/>
+      <dialog-creator/>
+      <br>
+      <span class="text-muted">Нет диалогов</span>
     </div>
     <img :src="images.logo" height="200" style="text-align: center" alt="">
   </div>
@@ -13,11 +17,12 @@
 <script>
 import DialogPresenter from './DialogPresenter.vue'
 import axios from "axios";
+import DialogCreator from "./DialogCreator.vue";
 
 export default {
   name: "DashboardMenu",
-  props: ['dialogs', 'user', 'users'],
-  components: {DialogPresenter},
+  props: ['dialogs', 'user', 'users', 'loading'],
+  components: {DialogCreator, DialogPresenter},
   methods: {
     update() {
       axios
@@ -33,9 +38,9 @@ export default {
           this.dialogs = response.data.dialogs
           this.users = response.data.users
           console.log(this.users)
-          // this.loading = false
+          this.loading = false
         })
-      // setTimeout(() => this.update(), 1000)
+      setTimeout(() => this.update(), 1000)
     },
     load: function () {
       this.update()
@@ -75,9 +80,52 @@ export default {
       //     this.dialogs = response.data.dialogs
       //     this.loading = false
       //   })
-    }
+    },
+    textFunc(dialog) {
+      let text = this.senderFunc(dialog)
+      // console.log(this.dialog)
+      // console.log(this.user)
+      // console.log('1111', text)
+      if (dialog.lastMessage.content.textContent) {
+        text = text + dialog.lastMessage.content.textContent.text
+      }
+      if (dialog.lastMessage.content.serviceContent) {
+        text = text + dialog.lastMessage.content.serviceContent.text
+      }
+      // console.log('2222', text)
+      text = text.length < 30 ?
+        text :
+        (text.slice(0, 27) + '...')
+      return text
+    },
+    timeFunc(dialog) {
+      const date = new Date(dialog.lastMessage.timestamp / 1000000);
+      const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+      const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+      const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+      const month = date.getUTCMonth() + 1;
+      const realMonth = month < 10 ? '0' + month : month
+      return hours + ':' + minutes + ', ' + day + '/' + realMonth;
+    },
+    senderFunc(dialog) {
+      // console.log('xxxxx', this.users)
+      // console.log('sender', this.dialog.lastMessage.senderId)
+      if (this.is_empty(dialog.lastMessage.senderId)) {
+        return ''
+      }
+      // console.log('sender not empty')
+      // console.log('msg', msg.senderId)
+      for (const user of this.users) {
+        // console.log('user', user.id)
+        if (user.id === dialog.lastMessage.senderId) {
+          // console.log(user)
+          return user.meta.name + ': '
+        }
+      }
+    },
   },
   mounted() {
+    this.loading = true
     this.load()
   }
 }
