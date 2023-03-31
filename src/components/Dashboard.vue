@@ -20,7 +20,7 @@
       <div class="messages-area">
         <div v-for="msg in messages">
           <message :user="user" :message="msg" :sender_id="msg.senderId" :user_id="user.id" :text="text(msg)"
-                   :time="time(msg.timestamp)" :sender="sender(msg)"/>
+                   :time="time(msg.timestamp, msg.modification)" :sender="sender(msg)"/>
         </div>
       </div>
 
@@ -125,14 +125,18 @@ export default {
         }
       }
     },
-    time(timestamp) {
+    time(timestamp, modification) {
       const date = new Date(timestamp / 1000000);
       const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
       const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
       const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
       const month = date.getUTCMonth() + 1;
       const realMonth = month < 10 ? '0' + month : month
-      return hours + ':' + minutes + ', ' + day + '/' + realMonth;
+      let res = hours + ':' + minutes + ', ' + day + '/' + realMonth;
+      if (modification) {
+        res += ", ред."
+      }
+      return res
     },
     update_dialog: function () {
       this.state = 'update-dialog'
