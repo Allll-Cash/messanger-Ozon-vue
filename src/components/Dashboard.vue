@@ -81,6 +81,12 @@ export default {
           // console.log(this.users)
           console.log("update")
         })
+      axios
+        .get(this.url('/v1/dialog/' + this.current_dialog.id))
+        .then((response) => {
+          console.log(response)
+          this.current_dialog = response.data.dialog
+        })
       setTimeout(() => {
         this.update()
       }, 1000)
