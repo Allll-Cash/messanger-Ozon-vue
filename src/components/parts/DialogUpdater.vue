@@ -66,7 +66,7 @@ export default {
           this.dialog = response.data.dialog
           this.users = response.data.users
         })
-      // TODO setTimeout(() => this.load(), 1000)
+      setTimeout(() => this.load(), 1000)
     },
     add() {
       this.error_name = '\n'

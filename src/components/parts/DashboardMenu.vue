@@ -40,7 +40,7 @@ export default {
           // console.log(this.users)
           this.loading = false
         })
-      // TODO setTimeout(() => this.update(), 1000)
+      setTimeout(() => this.update(), 1000)
     },
     load: function () {
       this.update()

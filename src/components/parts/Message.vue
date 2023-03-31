@@ -12,7 +12,7 @@
       <div :class="`message ${sender_id === user_id ? 'my' : sender_id ? 'not-my' : 'service'}`">
         <span v-if="state === 'message'">{{ this.text }}<br></span>
         <div v-if="state === 'upd'" class="message-update">
-          <textarea class="form-control" rows="1" v-model="text"/>
+          <textarea class="form-control" rows="1" v-model="text_new"/>
           <button class="btn btn-sm btn-primary shadow-none upd-button" @click="upd_message()">Редактировать
           </button>
         </div>
@@ -32,13 +32,15 @@ export default {
   data() {
     return {
       state: 'message',
-      last_msg: ''
+      last_msg: '',
+      text_new: ''
     }
   },
   methods: {
     upd() {
       if (this.state === 'message') {
         this.last_msg = this.text
+        this.text_new = this.text
         this.state = 'upd'
       }
       else {
@@ -52,7 +54,7 @@ export default {
           {
             user_id: this.user_id,
             message_id: this.message.id,
-            content: {textContent: {text: this.text}}
+            content: {textContent: {text: this.text_new}}
           }
         )
         .then((response) => {

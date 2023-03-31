@@ -80,7 +80,7 @@ export default {
           // console.log(this.users)
           console.log("update")
         })
-      // TODO setTimeout(() => {this.update()}, 1000)
+      setTimeout(() => {this.update()}, 1000)
     },
     load: function () {
       this.update()
