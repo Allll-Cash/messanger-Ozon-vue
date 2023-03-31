@@ -37,10 +37,10 @@ export default {
           // this.data = response.data.bookings
           this.dialogs = response.data.dialogs
           this.users = response.data.users
-          console.log(this.users)
+          // console.log(this.users)
           this.loading = false
         })
-      setTimeout(() => this.update(), 1000)
+      // TODO setTimeout(() => this.update(), 1000)
     },
     load: function () {
       this.update()

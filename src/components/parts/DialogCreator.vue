@@ -1,9 +1,6 @@
 <template>
   <div class="dialog">
     <button class="btn dialog-btn" @click="create_dialog()">
-<!--      <h6>{{dialog.meta.name}}</h6>-->
-<!--      <span>{{text}}</span> <br>-->
-<!--      <small class="text-muted">{{time}}</small>-->
       Создать диалог
     </button>
   </div>
@@ -11,8 +8,6 @@
 
 
 <script>
-import axios from "axios";
-
 export default {
   name: "DialogCreator",
   props: [],

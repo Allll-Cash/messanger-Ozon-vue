@@ -1,15 +1,22 @@
 <template>
   <div class="dashboard-area" :style="`height: ${window_height - 30}px`">
-    <div v-if="state === 'create-dialog'">
-      <div class="create-dialog-area">
-        <dialogs-creator-full :user="user"/>
-      </div>
+    <div class="create-dialog-area" v-if="state === 'create-dialog'">
+      <dialogs-creator-full :user="user"/>
+    </div>
+    <div class="update-dialog-area" v-else-if="state === 'update-dialog'">
+      <dialogs-updater :user="user" :dialog="current_dialog"/>
     </div>
     <div v-else-if="!current_dialog">
       <span>Выберите диалог</span>
     </div>
 
     <div v-if="current_dialog && state==='dashboard'">
+      <div class="dialog-info">
+        <button class="dialog-info-btn" @click="update_dialog()">
+          {{ current_dialog.meta.name }}
+        </button>
+      </div>
+
       <div class="messages-area">
         <div v-for="msg in messages" style="text-align: left">
           <span :style="`color: ${msg.senderId === user.id ? '#e5365a' : '#265bf5'};}`">{{ sender(msg) }}</span>
@@ -21,12 +28,12 @@
         </div>
       </div>
 
-      <div style="position: absolute; bottom: 5px; right: 0; left: 0;">
-        <div style="margin: 10px;" class="row">
-          <div class="col">
-            <textarea class="form-control" rows="2" style="height: 100%" v-model="message"/>
+      <div style="position: absolute; bottom: 0; right: 0; left: 0; background: #E7E7E7FF;">
+        <div style="margin: 15px; display: flex; padding: 5px">
+          <div style="margin: 0 10px; width: 100%;">
+            <textarea class="form-control" rows="2" style="height: 100%; width: 100%;" v-model="message"/>
           </div>
-          <div class="col-2">
+          <div style="margin: 0 10px;">
             <button class="btn btn-sm btn-primary shadow-none" style="height: 100%" @click="send_message()">Отправить
             </button>
           </div>
@@ -40,11 +47,12 @@
 <script>
 import axios from 'axios'
 import DialogsCreatorFull from "./parts/DialogCreatorFull.vue";
+import DialogsUpdater from "./parts/DialogUpdater.vue";
 
 
 export default {
   name: "Dashboard",
-  components: {DialogsCreatorFull},
+  components: {DialogsUpdater, DialogsCreatorFull},
   props: ['user'],
   data() {
     return {
@@ -75,7 +83,7 @@ export default {
           // console.log(this.users)
           console.log("update")
         })
-      setTimeout(() => {this.update()}, 1000)
+      // TODO setTimeout(() => {this.update()}, 1000)
     },
     load: function () {
       this.update()
@@ -128,6 +136,9 @@ export default {
       const month = date.getUTCMonth() + 1;
       const realMonth = month < 10 ? '0' + month : month
       return hours + ':' + minutes + ', ' + day + '/' + realMonth;
+    },
+    update_dialog: function () {
+      this.state = 'update-dialog'
     }
   },
   created() {
@@ -143,6 +154,10 @@ export default {
     Event.listen('create-dialog', () => {
       this.state = 'create-dialog'
     })
+    Event.listen('exit-dialog', () => {
+      this.state = 'dashboard'
+      this.current_dialog = null
+    })
   }
 }
 </script>
@@ -154,20 +169,29 @@ export default {
   bottom: 0;
   right: 0;
   left: 400px;
-  padding: 10px;
+  /*padding: 10px;*/
 }
 
 .messages-area {
   position: absolute;
-  top: 0;
+  top: 70px;
   right: 0;
   left: 0;
-  bottom: 150px;
-  padding: 10px;
+  bottom: 90px;
+  padding: 0 10px 10px 10px;
   overflow-y: scroll;
 }
 
 .create-dialog-area {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.update-dialog-area {
   position: absolute;
   top: 0;
   right: 0;
@@ -204,6 +228,35 @@ export default {
 .service {
   background-color: lightgray;
   text-align: center;
+}
+
+.dialog-info {
+  background: #e7e7e7;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 70px;
+}
+
+.dialog-info-btn {
+  border-radius: 0;
+  background-color: #e7e7e7;
+  border-color: lightgray;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-top: 0;
+  border-bottom: lightgray 2px solid;
+  color: #265bf5;
+  font-size: x-large;
+}
+
+.dialog-info-btn:hover, .dialog-info-btn:active {
+  background-color: lightgray !important;
 }
 
 </style>

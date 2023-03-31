@@ -19,9 +19,6 @@
     </div>
     <small class="card-text error">{{ error }}</small><br>
     <button class="btn dialog-btn confirm" @click="create_dialog()">
-      <!--      <h6>{{dialog.meta.name}}</h6>-->
-      <!--      <span>{{text}}</span> <br>-->
-      <!--      <small class="text-muted">{{time}}</small>-->
       Создать диалог
     </button>
   </div>
@@ -35,7 +32,7 @@ export default {
   props: ['user'],
   data() {
     return {
-      emails: ['', ''],
+      emails: [''],
       name: '',
       error: '\n'
     }
@@ -47,9 +44,6 @@ export default {
         this.error = 'Название не может быть пустым'
         return
       }
-      alert(this.name)
-      alert(this.emails)
-      alert(this.emails.length)
       const emails = document.getElementsByClassName('email')
       console.log(emails)
       const last_emails = this.emails
@@ -58,7 +52,7 @@ export default {
         // alert(emails.item(i).value)
         const email = emails.item(i).value
         if (!this.email_re.exec(email)) {
-          this.error = 'Email участника ' + (i + 1) + ' не является валидым'
+          this.error = 'Email участника ' + (i + 1) + ' не является валидым ("' + email + '")'
           this.emails = last_emails
           return
         }
