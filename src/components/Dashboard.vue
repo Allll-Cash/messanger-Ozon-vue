@@ -18,13 +18,9 @@
       </div>
 
       <div class="messages-area">
-        <div v-for="msg in messages" style="text-align: left">
-          <span :style="`color: ${msg.senderId === user.id ? '#e5365a' : '#265bf5'};}`">{{ sender(msg) }}</span>
-          <br>
-          <div :class="`message ${msg.senderId === user.id ? 'my' : msg.senderId ? 'not-my' : 'service'}`">
-            <span>{{ text(msg) }}</span> <br>
-            <small style="text-align: right">{{ time(msg.timestamp) }}</small>
-          </div>
+        <div v-for="msg in messages">
+          <message :user="user" :message="msg" :sender_id="msg.senderId" :user_id="user.id" :text="text(msg)"
+                   :time="time(msg.timestamp)" :sender="sender(msg)"/>
         </div>
       </div>
 
@@ -48,11 +44,12 @@
 import axios from 'axios'
 import DialogsCreatorFull from "./parts/DialogCreatorFull.vue";
 import DialogsUpdater from "./parts/DialogUpdater.vue";
+import Message from "./parts/Message.vue";
 
 
 export default {
   name: "Dashboard",
-  components: {DialogsUpdater, DialogsCreatorFull},
+  components: {DialogsUpdater, DialogsCreatorFull, Message},
   props: ['user'],
   data() {
     return {
@@ -106,7 +103,7 @@ export default {
         })
     },
     text(msg) {
-      // console.log(msg)
+      console.log(msg)
       // console.log("XXXXXXXX")
       if (msg.content.textContent) {
         return msg.content.textContent.text
@@ -178,7 +175,7 @@ export default {
   right: 0;
   left: 0;
   bottom: 90px;
-  padding: 0 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
   overflow-y: scroll;
 }
 
@@ -206,28 +203,6 @@ export default {
 
 .btn-primary {
   margin: 0;
-}
-
-.message {
-  text-align: left;
-  min-width: 30%;
-  max-width: 70%;
-  border-radius: 0.5rem;
-  padding: 5px;
-}
-
-.my {
-  background-color: #e5365a;
-  color: white;
-}
-
-.not-my {
-  background-color: white;
-}
-
-.service {
-  background-color: lightgray;
-  text-align: center;
 }
 
 .dialog-info {
