@@ -20,7 +20,8 @@
       <div class="messages-area">
         <div v-for="msg in messages">
           <message :user="user" :message="msg" :sender_id="msg.senderId" :user_id="user.id" :text="text(msg)"
-                   :time="time(msg.timestamp, msg.modification)" :sender="sender(msg)"/>
+                   :time="time(msg.timestamp, msg.modification)" :sender="sender(msg)" :likes="msg.likesCount"
+                   :dislikes="msg.dislikesCount" :is_like="msg.isLike" :is_dislike="msg.isDislike"/>
         </div>
       </div>
 
@@ -80,7 +81,9 @@ export default {
           // console.log(this.users)
           console.log("update")
         })
-      setTimeout(() => {this.update()}, 1000)
+      setTimeout(() => {
+        this.update()
+      }, 1000)
     },
     load: function () {
       this.update()
@@ -169,7 +172,7 @@ export default {
   top: 30px;
   bottom: 0;
   right: 0;
-  left: 400px;
+  left: 300px;
   /*padding: 10px;*/
 }
 

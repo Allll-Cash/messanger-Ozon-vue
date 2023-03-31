@@ -137,14 +137,14 @@ export default {
   top: 30px;
   bottom: 0;
   left: 0;
-  width: 400px;
+  width: 300px;
   background-color: white;
 }
 
 .messages-area {
   position: absolute;
   top: 0;
-  width: 400px;
+  width: 300px;
   left: 0;
   bottom: 200px;
   overflow-y: auto;
@@ -154,7 +154,7 @@ export default {
 img {
   position: fixed;
   bottom: 0;
-  left: 215px;
+  left: 115px;
   width: 180px;
 }
 </style>

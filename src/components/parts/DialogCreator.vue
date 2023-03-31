@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 .dialog {
-  width: 400px;
+  width: 300px;
   height: 80px;
 }
 
